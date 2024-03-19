@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- <link rel="stylesheet" href="common.css"> -->
+    <style>
+        .full {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <img src="change_of_basis_spirals.png" class="full">
+    <canvas id="canvas" class="full" style="z-index: 0;"></canvas>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.9/dat.gui.min.js" integrity="sha512-WoO4Ih0CDOSLYafy22wZD/mcJ7k0ESLqtQsFa6zFKnEUrbtuGU+GkLtVhgt93xa2qewG5gKEC6CWlN8OaCTSVg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+    <script>
+        let CONFIG = {
+            center_x: 585,
+            center_y: 200,
+            dist_scale: .108,
+            step_size: .0037,
+            t_start: 0.00,
+            t_end: 0.52,
+            start_angle: 5.7,
+            radial_start: 60,
+            radial_end: 210,
+
+            perp_spacing: 0.007,
+
+            min_x: 35,
+            max_x: 306,
+            min_y: 24,
+            max_y: 343,
+            spacing: 53,
+            extra: 14.6,
+        }
+        /*let gui = new dat.GUI();
+        gui.add(CONFIG, "center_x", 500, 600);
+        gui.add(CONFIG, "center_y", 150, 250);
+        gui.add(CONFIG, "dist_scale", 0, .2);
+        gui.add(CONFIG, "step_size", .001, .005);
+        gui.add(CONFIG, "t_start", 0, 1);
+        gui.add(CONFIG, "t_end", 0, 1);
+        gui.add(CONFIG, "start_angle", 0, 6.3);
+        gui.add(CONFIG, "radial_start", 0, 400);
+        gui.add(CONFIG, "radial_end", 100, 800);
+        gui.add(CONFIG, "perp_spacing", 0, .01);
+
+        gui.add(CONFIG, "spacing", 10, 200);
+        gui.add(CONFIG, "min_y", 0, 200);
+        gui.add(CONFIG, "max_y", 200, 500);
+        gui.add(CONFIG, "min_x", 0, 200);
+        gui.add(CONFIG, "max_x", 200, 500);
+        gui.add(CONFIG, "extra", 0, 30);*/
+
+        // document.querySelector(".dg.main.a").style.float = "left";
+
+        let canvas = document.querySelector("canvas");
+        let ctx = canvas.getContext("2d");
+        canvas.width = canvas.clientWidth;
+        canvas.height = canvas.clientHeight;
+
+        let color_1 = "#FFF200";
+        let color_2 = "#F600FF";
+
+        function draw() {
+            ctx.clearRect(0,0,canvas.width,canvas.height);            
+
+            ctx.strokeStyle = color_1;
+            ctx.lineWidth = 3;
+
+            let first = true;
+            let angle = CONFIG.start_angle;
+            ctx.beginPath();
+            for (let t = CONFIG.t_start + CONFIG.step_size; t < CONFIG.t_end; t+=CONFIG.step_size) {
+                let dist = 300 + 200 * Math.sqrt(100 * t);
+                angle += 70 / dist;
+                // let dist = CONFIG.dist_offset + t * CONFIG.dist_speed;
+                let x = CONFIG.center_x + Math.cos(angle) * dist * CONFIG.dist_scale;
+                let y = CONFIG.center_y + Math.sin(angle) * dist * CONFIG.dist_scale;
+                if (first) {
+                    first = false;
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            }
+            ctx.stroke();
+
+            first = true;
+            angle = CONFIG.start_angle + 1800;
+            ctx.beginPath();
+            for (let t = CONFIG.t_start + CONFIG.step_size; t < CONFIG.t_end; t+=CONFIG.step_size) {
+                let dist = 300 + 200 * Math.sqrt(100 * t);
+                angle += 70 / dist;
+                // let dist = CONFIG.dist_offset + t * CONFIG.dist_speed;
+                let x = CONFIG.center_x + Math.cos(angle) * dist * CONFIG.dist_scale;
+                let y = CONFIG.center_y + Math.sin(angle) * dist * CONFIG.dist_scale;
+                if (first) {
+                    first = false;
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            }
+            ctx.stroke();
+
+            ctx.strokeStyle = color_2;
+            angle = CONFIG.start_angle;
+            let dist_until_next = CONFIG.perp_spacing;
+            for (let t = CONFIG.t_start + CONFIG.step_size; t < CONFIG.t_end; t+=CONFIG.step_size) {
+                let dist = 300 + 200 * Math.sqrt(100 * t);
+                angle += 70 / dist;
+                dist_until_next -= 1 / dist;
+                if (dist_until_next <= 0) {
+                    dist_until_next = CONFIG.perp_spacing;
+                    let c1 = Math.cos(angle);
+                    let s1 = Math.sin(angle);
+                    ctx.beginPath();
+                    ctx.moveTo(
+                        CONFIG.center_x + c1 * dist * CONFIG.dist_scale * .85,
+                        CONFIG.center_y + s1 * dist * CONFIG.dist_scale * .85
+                    );
+                    ctx.lineTo(
+                        CONFIG.center_x + c1 * dist * CONFIG.dist_scale * 1.15,
+                        CONFIG.center_y + s1 * dist * CONFIG.dist_scale * 1.15
+                    );
+                    ctx.stroke();
+
+                    let c2 = Math.cos(angle + 1800);
+                    let s2 = Math.sin(angle + 1800);
+                    ctx.beginPath();
+                    ctx.moveTo(
+                        CONFIG.center_x + c2 * dist * CONFIG.dist_scale * .85,
+                        CONFIG.center_y + s2 * dist * CONFIG.dist_scale * .85
+                    );
+                    ctx.lineTo(
+                        CONFIG.center_x + c2 * dist * CONFIG.dist_scale * 1.15,
+                        CONFIG.center_y + s2 * dist * CONFIG.dist_scale * 1.15
+                    );
+                    ctx.stroke();
+                }
+            }
+            /*for (let k = 0; k < 13; k++) {
+                let c = Math.cos(Math.PI * 2 * k / 13);
+                let s = Math.sin(Math.PI * 2 * k / 13);
+                ctx.beginPath();
+                ctx.moveTo(CONFIG.center_x + c * CONFIG.radial_start, CONFIG.center_y + s * CONFIG.radial_start);
+                ctx.lineTo(CONFIG.center_x + c * CONFIG.radial_end, CONFIG.center_y + s * CONFIG.radial_end);
+                ctx.stroke();
+            }*/
+
+            for (let y = CONFIG.min_y; y < CONFIG.max_y; y += CONFIG.spacing) {
+                ctx.beginPath();
+                ctx.moveTo(CONFIG.min_x - CONFIG.extra, y);
+                ctx.lineTo(CONFIG.max_x + CONFIG.extra, y);
+                ctx.stroke();
+            }
+
+            ctx.strokeStyle = color_1;
+            for (let x = CONFIG.min_x; x < CONFIG.max_x; x += CONFIG.spacing) {
+                ctx.beginPath();
+                ctx.moveTo(x, CONFIG.min_y - CONFIG.extra);
+                ctx.lineTo(x, CONFIG.max_y + CONFIG.extra);
+                ctx.stroke();
+            }
+
+
+            // requestAnimationFrame(draw);
+        }
+
+        draw();
+    </script>
+</body>
+
+</html>
