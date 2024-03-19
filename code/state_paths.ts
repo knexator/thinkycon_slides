@@ -5,7 +5,7 @@ import { State, SokobanState, Vec, addVec, scaleVec, rotVec, eqVec } from "./mic
 
 let modulo_player = true;
 let see_clearly = true;
-let wait_for_scroll = true;
+let wait_for_scroll = false;
 let extra_edge = true;
 let fig_n = 4;
 
@@ -19,7 +19,6 @@ interface Node {
     color: string,
     x: number,
     y: number,
-    size?: number,
     // ctxRenderer: Function,
 }
 
@@ -133,7 +132,10 @@ network.on("click", function (params) {
         if (!clicked_node.expanded) {
             expandNode(clicked_node);
         }
+        setMainNode(clicked_node.state);
     }
+
+    network.setSelection({nodes: [findNodeContainingState(cur_state)!.id]});
 });
 
 let cur_hover_id: string | null = null;
@@ -230,6 +232,8 @@ network.on("afterDrawing", function (ctx: CanvasRenderingContext2D) {
         lineTo(ctx, addVec(mid2, {x:0, y:-12}));
         ctx.stroke();
     }
+    ctx.resetTransform();
+    State.drawState(cur_state, ctx, {x: 0, y: 0}, true);
 })
 
 function moveTo(ctx: CanvasRenderingContext2D, pos: Vec) {
@@ -264,6 +268,7 @@ function expandNode(cur_node) {
         });
     }
     nodes.update({ id: cur_node.id, expanded: true, color: "#fcba03" });
+    return true;
 }
 
 let pending_expansion: Node[] = [];
@@ -282,7 +287,7 @@ function autoStep() {
                     dashes: true,
                     width: 3,
                     // label: input,
-                    // color: "red",
+                    color: "red",
                 });
 
                 edges.add({
@@ -309,7 +314,7 @@ function autoStep() {
 
             return;
         };
-        expandNode(pending_expansion.shift());
+        while (pending_expansion.length > 0 && !expandNode(pending_expansion.shift())) {};
     }
     if (expandTime < 50) {
         expandCount = Math.min(expandCount + .1, 10);
@@ -365,7 +370,7 @@ function addNode(state: SokobanState, id: string | undefined = undefined, parent
         won: won,
         expanded: false,
 
-        label: id,
+        // label: id,
         // label: CONFIG.showIDs ? id : "",
         // label: "",
         color: "#9803fc",
@@ -380,6 +385,7 @@ function addNode(state: SokobanState, id: string | undefined = undefined, parent
     } as Node;
     if (extra_edge) {
         if (id === "1:1[0:3,1:2]" || id === "3:3[0:3,1:2]") {
+            // @ts-ignore
             cur_node.size = 15;
         }
     }
@@ -389,5 +395,88 @@ function addNode(state: SokobanState, id: string | undefined = undefined, parent
 
 addNode(State.initialState);
 
+let cur_state = State.initialState;
+let cur_next_states = State.nextStates(cur_state, false, see_clearly);
+let history = [cur_state];
+setMainNode(cur_state);
 
-autoStep();
+network.moveTo({position: {x: -200, y: 0}});
+
+const CODE2ACTION: Record<KeyboardEvent["code"], string> = {
+    "KeyA": "left",
+    "ArrowLeft": "left",
+    "KeyD": "right",
+    "ArrowRight": "right",
+    "KeyW": "up",
+    "ArrowUp": "up",
+    "KeyS": "down",
+    "ArrowDown": "down",
+}
+const delta_pos = {
+    "left": {x: -250, y: 0},
+    "right": {x: 250, y: 0},
+    "up": {x: 0, y: -250},
+    "down": {x: 0, y: 250},
+}
+
+window.addEventListener("keydown", (ev: KeyboardEvent) => {
+    if (ev.code === "Space") {
+        autoStep();
+
+
+
+
+
+        return false;
+    }
+    let action = CODE2ACTION[ev.code];
+    if (action && cur_next_states[action]) {
+        setMainNode(cur_next_states[action]);
+        ev.preventDefault();
+        return false;
+    } else if (ev.code === "KeyZ" && history.length > 1) {
+        history.pop();
+        cur_state = history.at(-1)!;        
+        cur_next_states = State.nextStates(cur_state, false, see_clearly);
+        network.setSelection({nodes: [findNodeContainingState(cur_state)!.id]});
+        ev.preventDefault();
+        return false;
+    } else if (ev.code === "KeyR") {
+        setMainNode(State.initialState);
+        ev.preventDefault();
+        return false;
+    }
+});
+
+function findNodeContainingState(state: SokobanState): Node | null {
+    let res = nodes.get({
+        filter: function (node: Node) {
+            return eqVec(node.state.crates[0], state.crates[0]) && eqVec(node.state.crates[1], state.crates[1]);
+        }
+    });
+    return res[0] || null;
+}
+
+function setMainNode(state: SokobanState) {
+    let cur_node = findNodeContainingState(state)!;
+    expandNode(cur_node);
+    cur_node.expanded = true;
+    cur_state = state;
+    cur_next_states = State.nextStates(cur_state, false, see_clearly);
+
+    /*let main_pos = network.getPositions(main_node.id)[main_node.id];
+    for (let next_action in main_next_states) {
+        let cur = getOrAddNode(main_next_states[next_action], addVec(main_pos, delta_pos[next_action]));
+        nodes.update({ id: main_node.id, color: "#fcba03" });
+        if (edges.get(`${main_node.id}_${next_action}`) === null) {
+            edges.add({
+                id: `${main_node.id}_${next_action}`,
+                from: main_node.id,
+                to: cur.id,
+                input: next_action,
+            });
+        }
+    }*/
+    network.setSelection({nodes: [cur_node.id]});
+    history.push(cur_state);
+}

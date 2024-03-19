@@ -139,7 +139,6 @@ network.on("afterDrawing", function (ctx: CanvasRenderingContext2D) {
 function expandNode(cur_node): boolean {
     if (cur_node.expanded) return false;
     // console.log("cur node: ", cur_node);
-    console.log('see:', see_clearly);
     let next_states = State.nextStates(cur_node.state, modulo_player, see_clearly);
     for (const [input, new_state] of Object.entries(next_states)) {
         let new_id = State.id(new_state);
