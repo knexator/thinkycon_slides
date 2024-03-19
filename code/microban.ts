@@ -125,6 +125,18 @@ let initialState = parseLevel(`
 // #############
 // `)
 
+// let initialState = parseLevel(`
+// ..#####..
+// .##...###
+// .#......#
+// .#@#@#@.#
+// .#.#P*.##
+// ##.#.#O#.
+// #......#.
+// #...#..#.
+// ########.
+// `)
+
 function crateAt(state: SokobanState, pos: Vec) {
     return state.crates.some(c => c.x == pos.x && c.y == pos.y)
 }

@@ -101,6 +101,17 @@ let initialState = parseLevel(`
 // #...........#
 // #############
 // `)
+// let initialState = parseLevel(`
+// ..#####..
+// .##...###
+// .#......#
+// .#@#@#@.#
+// .#.#P*.##
+// ##.#.#O#.
+// #......#.
+// #...#..#.
+// ########.
+// `)
 function crateAt(state, pos) {
     return state.crates.some(c => c.x == pos.x && c.y == pos.y);
 }
