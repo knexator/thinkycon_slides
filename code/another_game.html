@@ -2,6 +2,9 @@
 <html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
     <!-- <link rel="stylesheet" href="common.css"> -->
     <style>
         .full {
@@ -211,6 +214,8 @@
                 cur_time = last_time;
             }
             ctx.clearRect(0,0,canvas.width,canvas.height);
+            ctx.fillStyle = "#36393E"
+            ctx.fillRect(0,0,canvas.width,canvas.height);
             let delta_time = (cur_time - last_time) * 0.001;
             last_time = cur_time;
 
@@ -252,19 +257,35 @@
             }
             ctx.stroke();
             
-            ctx.fillStyle = (Math.abs(t2 - M) < .001) ? color_2 : "white";
+            const won_2 = Math.abs(t2 - M) < .001;
+            ctx.fillStyle = color_2;
+            // ctx.strokeStyle = color_2;
             ctx.beginPath();
             ctx.arc(x(t2), y2(t2), r - 1, 0, 2 * Math.PI);
             ctx.fill()
-            ctx.stroke();
+            // ctx.stroke();
 
-            ctx.fillStyle = (Math.abs(t1 - (1 - M)) < .001) ? color_1 : "white";
-            ctx.strokeStyle = color_1;
+            ctx.font = '128px Arial';
+            ctx.textBaseline = "middle";
+            ctx.textAlign = "center";
+
+            if (won_2) {
+                ctx.fillText('✔️', x(t2) - 150, y2(t2) - 75);
+            }
+
+            const won_1 = Math.abs(t1 - (1 - M)) < .001;
+            ctx.fillStyle = color_1;
+            // ctx.strokeStyle = color_1;
             ctx.beginPath();
             ctx.arc(x(t1), y1(t1), r - 1, 0, 2 * Math.PI);
             ctx.fill()
-            ctx.stroke();
-                        
+            // ctx.stroke();
+
+            if (won_1) {
+                ctx.fillText('✔️', x(t1) + 150, y1(t1) - 75);
+            }
+
+
             requestAnimationFrame(draw);
         }
 
