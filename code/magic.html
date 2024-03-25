@@ -20,9 +20,11 @@
 </head>
 
 <body>
-    <iframe src="./fig_1.html" frameborder="0"></iframe>
+    <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vRZJDgy-vTUmlkJ8bkdMVMw2fu1LqRuCSPbxPH7K7HmSUenFwr9iShu_XTSwRP-fv_p-CXEYy-WDV8w/embed?start=true&loop=false&delayms=60000" frameborder="0" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
     <script>
         const sources = [
+            // "https://docs.google.com/presentation/d/e/2PACX-1vRZJDgy-vTUmlkJ8bkdMVMw2fu1LqRuCSPbxPH7K7HmSUenFwr9iShu_XTSwRP-fv_p-CXEYy-WDV8w/embed?start=true&loop=false&delayms=60000",
+            "./initial_slides.html",
             "./fig_1.html",
             "./fig_2.html",
             "./fig_3.html",
@@ -31,12 +33,20 @@
         let cur_index = 0;
 
         const iframe = document.querySelector("iframe");
+        iframe.src = sources[cur_index];
 
         function keyPressed(code) {
             console.log('key pressed in child:', code);
             if (code === "KeyM") {
-                cur_index = (cur_index + 1) % sources.length;
-                iframe.src = sources[cur_index];
+                if (cur_index + 1 < sources.length) {
+                    cur_index += 1;
+                    iframe.src = sources[cur_index];
+                }
+            } else if (code === "KeyN") {
+                if (cur_index > 0) {
+                    cur_index -= 1;
+                    iframe.src = sources[cur_index];
+                }
             }
         }
     </script>
