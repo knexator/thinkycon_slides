@@ -293,6 +293,10 @@ window.addEventListener("keydown", (ev: KeyboardEvent) => {
         ev.preventDefault();
         return false;
     }
+    if (window.parent !== window) {
+        // @ts-expect-error
+        window.parent.keyPressed(ev.code);
+    }
 });
 
 function findNodeContainingState(state: SokobanState): Node | null {
