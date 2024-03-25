@@ -16,12 +16,23 @@
             background-color: #36393E;
             /* background-color: rgb(214, 214, 214); */
         }
+
+        canvas {
+            position: absolute;
+            margin: 0;
+            left: 65vw;
+            top: 3vw;
+            width: 30vw;
+            height: 35vw;
+            border: 10px solid #333333;
+        }
     </style>
 </head>
 
 <body>
-    <img src="../slides/1.svg">
-    <img src="../slides/2.svg" style="display: none;">
+    <canvas></canvas>
+    <img src="../slides/title.svg">
+    <img src="../slides/main.svg" style="display: none;">
     <img src="../slides/anim/1.svg" style="display: none;">
     <img src="../slides/anim/2.svg" style="display: none;">
     <img src="../slides/anim/3.svg" style="display: none;">
@@ -33,26 +44,7 @@
     <img src="../slides/anim/9.svg" style="display: none;">
     <img src="../slides/anim/10.svg" style="display: none;">
     <img src="../slides/anim/11.svg" style="display: none;">
-    <script>
-        const imgs = document.querySelectorAll("img");
-
-        let cur = 0;
-        document.addEventListener('keydown', ev => {
-            if (ev.code === "Space" || ev.code === "KeyD" || ev.code === "ArrowRight") {
-                if (cur + 1 < imgs.length) {
-                    imgs[cur].style.display = "none";
-                    cur += 1;
-                    imgs[cur].style.display = "unset";
-                }
-            } else if (ev.code === "KeyA" || ev.code === "ArrowLeft") {
-                if (cur > 0) {
-                    imgs[cur].style.display = "none";
-                    cur -= 1;
-                    imgs[cur].style.display = "unset";
-                }
-            }
-        })
-    </script>
+    <script src="initial_slides.js" type="module"></script>
 </body>
 
 </html>

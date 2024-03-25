@@ -306,6 +306,7 @@ function drawState(state, ctx, pos, main = false) {
         ctx.drawImage(spritesheet, 15, 0, 5, 5, OFF_X + target.x * TILE_S, OFF_Y + target.y * TILE_S, TILE_S, TILE_S);
     });
     ctx.drawImage(spritesheet, 20, 0, 5, 5, OFF_X + state.player.x * TILE_S, OFF_Y + state.player.y * TILE_S, TILE_S, TILE_S);
+    console.log("drawing");
 }
 function drawStateToCanvas(state) {
     let TILE_S = 50;

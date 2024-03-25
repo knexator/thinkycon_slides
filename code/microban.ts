@@ -339,6 +339,7 @@ function drawState(state: SokobanState, ctx: CanvasRenderingContext2D, pos: Vec,
     })
 
     ctx.drawImage(spritesheet, 20, 0, 5, 5, OFF_X + state.player.x * TILE_S, OFF_Y + state.player.y * TILE_S, TILE_S, TILE_S);
+    console.log("drawing");
 }
 
 function drawStateToCanvas(state: SokobanState) {
