@@ -105,6 +105,9 @@ document.addEventListener('keydown', ev => {
                 cur += 1;
                 imgs[cur].style.display = "unset";
                 canvas.style.display = (cur === 1 || cur === 2) ? "initial" : "none";
+            } else {
+                // @ts-expect-error
+                window.parent.keyPressed('KeyM');
             }
         } else if (ev.code === "KeyA" || ev.code === "ArrowLeft") {
             if (cur > 0) {

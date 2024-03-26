@@ -3,69 +3,29 @@
 
 <head>
     <link rel="stylesheet" href="common.css">
+    <style>
+        body {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            overflow: hidden;
+            background-color: #36393E;
+            /* background-color: rgb(214, 214, 214); */
+        }
+
+        #slide {
+            position: absolute;
+            pointer-events: none;
+        }
+    </style>
 </head>
 
 <body>
     <div id="mynetwork"></div>
     <script src="graph_examples.js" type="module"></script>
-    <!--script type="module">
-import vis from "https://unpkg.com/vis-network@9.1.2/dist/vis-network.esm.min.js"
-
-let nodes = new vis.DataSet();
-let edges = new vis.DataSet();
-let network = new vis.Network(
-    document.getElementById("mynetwork"),
-    { // data
-        nodes: nodes,
-        edges: edges,
-    },
-    { // options
-        edges: {
-            arrows: "to",
-            smooth: false,
-        },
-        /*nodes: {
-            color: {
-                highlight: "#fcba03",
-            },
-        },*/
-        physics: {
-            barnesHut: {
-                gravitationalConstant: -20000,
-                damping: 0.75,
-            },
-            minVelocity: 0,
-        },
-        interaction: {
-            hover: true,
-        },
-    }
-);
-
-nodes.add({
-  id: "a",
-  color: "#9803fc",
-  shape: "diamond",
-});
-
-nodes.add({
-  id: "b",
-  color: "#fcba03",
-  shape: "star",
-});
-
-edges.add({
-  id: "a_b",
-  from: "a",
-  to: "b",
-});
-
-window.addEventListener("keydown", ev => {
-  console.log("in .js, key down");
-  ev.preventDefault();
-  return false;
-});
-    </script-->
+    <img src="../slides/why_nobg.svg" id="slide">
 </body>
 
 </html>
