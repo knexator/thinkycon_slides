@@ -1,6 +1,7 @@
 // @ts-ignore
 import vis from "https://unpkg.com/vis-network@9.1.2/dist/vis-network.esm.min.js";
 import { State, addVec, scaleVec, eqVec } from "./microban.js";
+// TODO: move this to fig_4 ?
 let modulo_player = true;
 let see_clearly = true;
 let wait_for_scroll = false;
@@ -389,6 +390,10 @@ window.addEventListener("keydown", (ev) => {
         setMainNode(State.initialState);
         ev.preventDefault();
         return false;
+    }
+    if (window.parent !== window) {
+        // @ts-expect-error
+        window.parent.keyPressed(ev.code);
     }
 });
 function findNodeContainingState(state) {

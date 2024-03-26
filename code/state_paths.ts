@@ -3,6 +3,8 @@ import vis from "https://unpkg.com/vis-network@9.1.2/dist/vis-network.esm.min.js
 
 import { State, SokobanState, Vec, addVec, scaleVec, rotVec, eqVec } from "./microban.js";
 
+// TODO: move this to fig_4 ?
+
 let modulo_player = true;
 let see_clearly = true;
 let wait_for_scroll = false;
@@ -422,11 +424,6 @@ const delta_pos = {
 window.addEventListener("keydown", (ev: KeyboardEvent) => {
     if (ev.code === "Space") {
         autoStep();
-
-
-
-
-
         return false;
     }
     let action = CODE2ACTION[ev.code];
@@ -445,6 +442,10 @@ window.addEventListener("keydown", (ev: KeyboardEvent) => {
         setMainNode(State.initialState);
         ev.preventDefault();
         return false;
+    }
+    if (window.parent !== window) {
+        // @ts-expect-error
+        window.parent.keyPressed(ev.code);
     }
 });
 
