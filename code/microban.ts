@@ -322,23 +322,23 @@ function drawState(state: SokobanState, ctx: CanvasRenderingContext2D, pos: Vec,
         for (let i = 0; i < state.w; i++) {
             if (state.walls[j][i]) {
                 // wall
-                ctx.drawImage(spritesheet, 0, 0, 5, 5, OFF_X + i * TILE_S, OFF_Y + j * TILE_S, TILE_S + 1, TILE_S + 1);
+                ctx.drawImage(spritesheet, 1 + 0 * 7, 1, 5, 5, OFF_X + i * TILE_S, OFF_Y + j * TILE_S, TILE_S, TILE_S);
             } else {
                 // background
-                ctx.drawImage(spritesheet, 5, 0, 5, 5, OFF_X + i * TILE_S, OFF_Y + j * TILE_S, TILE_S + 1, TILE_S + 1);
+                ctx.drawImage(spritesheet, 1 + 1 * 7, 1, 5, 5, OFF_X + i * TILE_S, OFF_Y + j * TILE_S, TILE_S + 1, TILE_S + 1);
             }
         }
     }
 
     state.targets.forEach(target => {
-        ctx.drawImage(spritesheet, 10, 0, 5, 5, OFF_X + target.x * TILE_S, OFF_Y + target.y * TILE_S, TILE_S, TILE_S);
+        ctx.drawImage(spritesheet, 1 + 2 * 7, 1, 5, 5, OFF_X + target.x * TILE_S, OFF_Y + target.y * TILE_S, TILE_S, TILE_S);
     })
 
     state.crates.forEach(target => {
-        ctx.drawImage(spritesheet, 15, 0, 5, 5, OFF_X + target.x * TILE_S, OFF_Y + target.y * TILE_S, TILE_S, TILE_S);
+        ctx.drawImage(spritesheet, 1 + 3 * 7, 1, 5, 5, OFF_X + target.x * TILE_S, OFF_Y + target.y * TILE_S, TILE_S, TILE_S);
     })
 
-    ctx.drawImage(spritesheet, 20, 0, 5, 5, OFF_X + state.player.x * TILE_S, OFF_Y + state.player.y * TILE_S, TILE_S, TILE_S);
+    ctx.drawImage(spritesheet, 1 + 4 * 7, 1, 5, 5, OFF_X + state.player.x * TILE_S, OFF_Y + state.player.y * TILE_S, TILE_S, TILE_S);
 }
 
 function drawStateToCanvas(state: SokobanState) {
