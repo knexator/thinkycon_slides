@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Beautiful State Graph of Microban 1</title>
+    <style>
+        iframe {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            overflow: hidden;
+            background-color: #36393E;
+            /* background-color: rgb(214, 214, 214); */
+        }
+    </style>
+</head>
+
+<body>
+    <iframe frameborder="0" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+    <script>
+        const sources = [
+            // "https://docs.google.com/presentation/d/e/2PACX-1vRZJDgy-vTUmlkJ8bkdMVMw2fu1LqRuCSPbxPH7K7HmSUenFwr9iShu_XTSwRP-fv_p-CXEYy-WDV8w/embed?start=true&loop=false&delayms=60000",
+            "./initial_slides.html",
+            "./fig_1.html",
+            "./graph_examples.html",
+            "./fig_1.html",
+            "./fig_2.html",
+            "./fig_3.html",
+            "./fig_4.html",
+            "./state_paths.html",
+            "./another_game.html",
+        ];
+        // TODO: plagiarism slide
+        let cur_index = 0;
+
+        const base_iframe = document.querySelector("iframe");
+        const iframes = sources.map(x => {
+            // let iframe = document.createElement("iframe");
+            let iframe = base_iframe.cloneNode();
+            document.body.appendChild(iframe);
+            iframe.src = x;
+            return iframe;
+        });
+        base_iframe.remove();
+
+        function updateVisible() {
+            iframes.forEach((x, k) => {
+                x.style.display = k === cur_index ? "unset" : "none";
+            });
+        }
+        updateVisible();
+
+
+        function keyPressed(code) {
+            console.log('key pressed in child:', code);
+            if (code === "KeyM") {
+                if (cur_index + 1 < sources.length) {
+                    cur_index += 1;
+                    updateVisible();
+                }
+            } else if (code === "KeyN") {
+                if (cur_index > 0) {
+                    cur_index -= 1;
+                    updateVisible();
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

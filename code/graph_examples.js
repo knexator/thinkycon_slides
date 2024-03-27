@@ -5,7 +5,6 @@ import { randomInt } from "./random.js";
 // import Rand from "rand-seed";
 import Rand from "./node_modules/rand-seed/dist/rand-seed.es.js";
 import { mod } from "./math.js";
-console.log(Rand);
 function makeNetwork(raw_edges) {
     let new_div = document.createElement("div");
     document.body.appendChild(new_div);
