@@ -219,6 +219,15 @@
             if (cur_time === undefined) {
                 cur_time = last_time;
             }
+            if (canvas.width !== canvas.clientWidth || canvas.height !== canvas.clientHeight) {
+                canvas.width = canvas.clientWidth;
+                canvas.height = canvas.clientHeight;
+                r = canvas.height / 16;
+                s1 = canvas.height * .5 / (M * (1 - M));
+                s2 = s1 * 2;
+                ctx.lineWidth = 3;
+            }
+
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = "#36393E"
             ctx.fillRect(0, 0, canvas.width, canvas.height);
