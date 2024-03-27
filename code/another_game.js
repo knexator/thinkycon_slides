@@ -1,4 +1,19 @@
-"use strict";
+import { State } from "./microban.js";
+let state_leftBlocksRight = structuredClone(State.initialState);
+state_leftBlocksRight.crates[1].x -= 1;
+state_leftBlocksRight.player.x += 2;
+state_leftBlocksRight.player.y += 3;
+let state_rightBlocksLeft = structuredClone(State.initialState);
+state_rightBlocksLeft.crates[1].x -= 1;
+state_rightBlocksLeft.crates[1].y -= 3;
+state_rightBlocksLeft.crates[0].y -= 1;
+state_rightBlocksLeft.player.x += 1;
+state_rightBlocksLeft.player.y += 1;
+let state_magic = structuredClone(State.initialState);
+state_magic.crates[1].y -= 1;
+state_magic.crates[0].y -= 1;
+state_magic.player.x += 3;
+state_magic.player.y += 2;
 let canvas = document.querySelector("canvas");
 let ctx = canvas.getContext("2d");
 canvas.width = canvas.clientWidth;
@@ -85,7 +100,7 @@ function valid1(t) {
     let dy = y1(t) - y2(t2);
     return !(dx * dx + dy * dy < r * r * 4);
 }
-window.valid1 = valid1;
+// window.valid1 = valid1;
 function move1(target_t) {
     target_t = clamp(target_t, 0, 1 - M);
     let step_size = .01;
@@ -167,10 +182,37 @@ window.addEventListener("mouseup", ev => {
     grabbing = 0;
     document.body.style.cursor = (hovering == 0) ? "default" : "grab";
 });
+let keyA = false;
+let keyS = false;
+let keyD = false;
 window.addEventListener("keydown", ev => {
-    if (window.parent !== window) {
+    if (ev.code === "KeyA") {
+        keyA = true;
+    }
+    else if (ev.code === "KeyS") {
+        keyS = true;
+    }
+    else if (ev.code === "KeyD") {
+        keyD = true;
+    }
+    else if (ev.code === "KeyF") {
+        grabbing = 0;
+        t1 = .5;
+    }
+    else if (window.parent !== window) {
         // @ts-expect-error
         window.parent.keyPressed(ev.code);
+    }
+});
+window.addEventListener("keyup", ev => {
+    if (ev.code === "KeyA") {
+        keyA = false;
+    }
+    else if (ev.code === "KeyS") {
+        keyS = false;
+    }
+    else if (ev.code === "KeyD") {
+        keyD = false;
     }
 });
 let color_1 = "#f7d125";
@@ -252,6 +294,15 @@ function draw(cur_time) {
     // ctx.stroke();
     if (won_1) {
         ctx.fillText('✔️', x(t1) + 150, y1(t1) - 75);
+    }
+    if (keyA) {
+        State.drawState(state_leftBlocksRight, ctx, { x: canvas.width / 2, y: canvas.height / 2 }, false);
+    }
+    else if (keyS) {
+        State.drawState(state_rightBlocksLeft, ctx, { x: canvas.width / 2, y: canvas.height / 2 }, false);
+    }
+    else if (keyD) {
+        State.drawState(state_magic, ctx, { x: canvas.width / 2, y: canvas.height / 2 }, false);
     }
     requestAnimationFrame(draw);
 }
