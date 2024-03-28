@@ -133,7 +133,7 @@ network.on("afterDrawing", function (ctx) {
         // ctx.fillRect(pos.x, pos.y, 100, 100);
         // ctx.fillRect(cur_hover_pos.x, cur_hover_pos.y, 100, 100);
     }
-    if (fully_expanded) {
+    if (fully_expanded && cur_showing > 0) {
         // TODO: tangents, etc
         let node_positions = network.getPositions();
         ctx.lineWidth = 4;
@@ -151,6 +151,10 @@ network.on("afterDrawing", function (ctx) {
         lineTo(ctx, addVec(mid1, { x: 10, y: 20 }));
         lineTo(ctx, addVec(mid1, { x: 0, y: 30 }));
         ctx.stroke();
+        if (cur_showing <= 1) {
+            end();
+            return;
+        }
         let cross_center_1 = scaleVec(addVec(node_positions["1:1[0:2,1:3]"], node_positions["3:3[0:2,1:2]"]), .5);
         cross_center_1 = addVec(cross_center_1, { x: 0, y: 20 });
         moveTo(ctx, addVec(cross_center_1, { x: -20, y: -40 }));
@@ -158,6 +162,10 @@ network.on("afterDrawing", function (ctx) {
         moveTo(ctx, addVec(cross_center_1, { x: 20, y: -40 }));
         lineTo(ctx, addVec(cross_center_1, { x: -20, y: 40 }));
         ctx.stroke();
+        if (cur_showing <= 2) {
+            end();
+            return;
+        }
         ctx.strokeStyle = "green";
         ctx.beginPath();
         moveTo(ctx, addVec(node_positions["1:1[0:2,2:3]"], { x: 20, y: 20 }));
@@ -174,6 +182,10 @@ network.on("afterDrawing", function (ctx) {
         lineTo(ctx, addVec(mid2, { x: 10, y: 22 }));
         lineTo(ctx, addVec(mid2, { x: 0, y: 35 }));
         ctx.stroke();
+        if (cur_showing <= 3) {
+            end();
+            return;
+        }
         let cross_center_2 = scaleVec(addVec(node_positions["2:2[0:1,1:0]"], node_positions["1:1[0:2,1:0]"]), .5);
         cross_center_2 = addVec(cross_center_2, { x: 20, y: 0 });
         moveTo(ctx, addVec(cross_center_2, { x: -40, y: -20 }));
@@ -181,6 +193,10 @@ network.on("afterDrawing", function (ctx) {
         moveTo(ctx, addVec(cross_center_2, { x: 40, y: -20 }));
         lineTo(ctx, addVec(cross_center_2, { x: -40, y: 20 }));
         ctx.stroke();
+        if (cur_showing <= 4) {
+            end();
+            return;
+        }
         ctx.strokeStyle = "blue";
         ctx.beginPath();
         moveTo(ctx, addVec(node_positions["1:1[0:2,2:3]"], { x: -20, y: -20 }));
@@ -199,8 +215,11 @@ network.on("afterDrawing", function (ctx) {
         lineTo(ctx, addVec(mid2, { x: 0, y: -12 }));
         ctx.stroke();
     }
-    ctx.resetTransform();
-    State.drawState(cur_state, ctx, { x: 0, y: 0 }, true);
+    end();
+    function end() {
+        ctx.resetTransform();
+        State.drawState(cur_state, ctx, { x: 0, y: 0 }, true);
+    }
 });
 function moveTo(ctx, pos) {
     ctx.moveTo(pos.x, pos.y);
@@ -367,6 +386,7 @@ const delta_pos = {
     "up": { x: 0, y: -250 },
     "down": { x: 0, y: 250 },
 };
+let cur_showing = 0;
 window.addEventListener("keydown", (ev) => {
     if (ev.code === "Space") {
         autoStep();
@@ -388,6 +408,13 @@ window.addEventListener("keydown", (ev) => {
     }
     else if (ev.code === "KeyR") {
         setMainNode(State.initialState);
+        ev.preventDefault();
+        return false;
+    }
+    else if (ev.code === "KeyF") {
+        if (cur_showing < 6) {
+            cur_showing += 1;
+        }
         ev.preventDefault();
         return false;
     }
