@@ -115,6 +115,7 @@ function updateVisible() {
         x.style.display = k === cur_selected ? "unset" : "none";
     });
 }
+updateVisible();
 window.addEventListener("keydown", (ev) => {
     if (ev.code === "KeyD" || ev.code === "ArrowRight") {
         cur_selected = mod(cur_selected + 1, all_edges.length);

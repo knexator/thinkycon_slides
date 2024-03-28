@@ -138,6 +138,8 @@ function updateVisible() {
     });
 }
 
+updateVisible();
+
 window.addEventListener("keydown", (ev: KeyboardEvent) => {
     if (ev.code === "KeyD" || ev.code === "ArrowRight") {
         cur_selected = mod(cur_selected + 1, all_edges.length);
