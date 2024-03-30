@@ -1,3 +1,6 @@
+function copy(x) {
+    return structuredClone(x);
+}
 const DIRS = [
     { x: 1, y: 0 },
     { x: 0, y: 1 },
@@ -282,6 +285,31 @@ function id(state) {
 }
 export let spritesheet = new Image();
 spritesheet.src = './sokoban_spritesheet.png';
+function drawStateScaledAnimationIntroThing(state, ctx, pos, scale) {
+    let TILE_S = scale * Math.ceil(ctx.canvas.height / state.h);
+    ctx.imageSmoothingEnabled = false;
+    let OFF_X = pos.x;
+    let OFF_Y = pos.y;
+    for (let j = 0; j < state.h; j++) {
+        for (let i = 0; i < state.w; i++) {
+            if (state.walls[j][i]) {
+                // wall
+                ctx.drawImage(spritesheet, 1 + 0 * 7, 1, 5, 5, OFF_X + i * TILE_S, OFF_Y + j * TILE_S, TILE_S, TILE_S);
+            }
+            else {
+                // background
+                ctx.drawImage(spritesheet, 1 + 1 * 7, 1, 5, 5, OFF_X + i * TILE_S, OFF_Y + j * TILE_S, TILE_S + 1, TILE_S + 1);
+            }
+        }
+    }
+    state.targets.forEach(target => {
+        ctx.drawImage(spritesheet, 1 + 2 * 7, 1, 5, 5, OFF_X + target.x * TILE_S, OFF_Y + target.y * TILE_S, TILE_S, TILE_S);
+    });
+    state.crates.forEach(target => {
+        ctx.drawImage(spritesheet, 1 + 3 * 7, 1, 5, 5, OFF_X + target.x * TILE_S, OFF_Y + target.y * TILE_S, TILE_S, TILE_S);
+    });
+    ctx.drawImage(spritesheet, 1 + 4 * 7, 1, 5, 5, OFF_X + state.player.x * TILE_S, OFF_Y + state.player.y * TILE_S, TILE_S, TILE_S);
+}
 function drawState(state, ctx, pos, main = false) {
     let TILE_S = main ? Math.ceil(ctx.canvas.height / state.h) : 50;
     ctx.imageSmoothingEnabled = false;
@@ -474,4 +502,4 @@ function rectGrid(fillValue, width, height) {
     }
     return result;
 }
-export let State = { initialState, nextStates, isWon, id, isClearlyLost, drawState, drawStateToCanvas /*drawToUrl*/ };
+export let State = { initialState, nextStates, isWon, id, isClearlyLost, drawState, drawStateToCanvas /*drawToUrl*/, drawStateScaledAnimationIntroThing, copy };
