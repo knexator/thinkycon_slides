@@ -258,6 +258,21 @@ function draw(cur_time) {
             ctx.lineTo(x(t), y1(t));
         }
     }
+    ctx.lineTo(x(1 - M), y1(1 - M));
+    ctx.stroke();
+    // ctx.fillStyle = color_1;
+    // ctx.beginPath();
+    // ctx.arc(x(1 - M), y1(1 - M), 5, 0, 2 * Math.PI);
+    // ctx.fill();
+    // ctx.beginPath();
+    // ctx.moveTo(x(1-M)+5, y1(1-M)-7.8);
+    // ctx.lineTo(x(1-M)-5, y1(1-M)+7.8);
+    // ctx.stroke();
+    let dx1 = x(1 - M - .008) - x(1 - M);
+    let dy1 = y1(1 - M - .008) - y1(1 - M);
+    ctx.beginPath();
+    ctx.moveTo(x(1 - M) + dy1, y1(1 - M) - dx1);
+    ctx.lineTo(x(1 - M) - dy1, y1(1 - M) + dx1);
     ctx.stroke();
     ctx.strokeStyle = color_2;
     ctx.beginPath();
@@ -272,6 +287,20 @@ function draw(cur_time) {
         }
     }
     ctx.stroke();
+    // ctx.fillStyle = color_2;
+    // ctx.beginPath();
+    // ctx.arc(x(M), y2(M), 5, 0, 2 * Math.PI);
+    // ctx.fill();
+    // ctx.beginPath();
+    // ctx.moveTo(x(M)-8, y2(M)-5.2);
+    // ctx.lineTo(x(M)+8, y2(M)+5.2);
+    // ctx.stroke();
+    let dx2 = x(M - .005) - x(M);
+    let dy2 = y2(M - .005) - y2(M);
+    ctx.beginPath();
+    ctx.moveTo(x(M) + dy2, y2(M) - dx2);
+    ctx.lineTo(x(M) - dy2, y2(M) + dx2);
+    ctx.stroke();
     const won_2 = Math.abs(t2 - M) < .001;
     ctx.fillStyle = color_2;
     // ctx.strokeStyle = color_2;
@@ -283,7 +312,12 @@ function draw(cur_time) {
     ctx.textBaseline = "middle";
     ctx.textAlign = "center";
     if (won_2) {
-        ctx.fillText('✔️', x(t2) - 150, y2(t2) - 75);
+        ctx.fillText('✔️', x(M) - 150, y2(M) - 75);
+    }
+    else {
+        ctx.globalAlpha = .2;
+        ctx.fillText('✔️', x(M) - 150, y2(M) - 75);
+        ctx.globalAlpha = 1;
     }
     const won_1 = Math.abs(t1 - (1 - M)) < .001;
     ctx.fillStyle = color_1;
@@ -293,7 +327,13 @@ function draw(cur_time) {
     ctx.fill();
     // ctx.stroke();
     if (won_1) {
-        ctx.fillText('✔️', x(t1) + 150, y1(t1) - 75);
+        ctx.fillText('✔️', x(1 - M) + 150, y1(1 - M) - 75);
+    }
+    else {
+        ctx.globalAlpha = .2;
+        ctx.fillText('✔️', x(1 - M) + 150, y1(1 - M) - 75);
+        // ctx.fillText('❌', x(1 - M) + 150, y1(1 - M) - 75);
+        ctx.globalAlpha = 1;
     }
     if (keyA) {
         State.drawState(state_leftBlocksRight, ctx, { x: canvas.width / 2, y: canvas.height / 2 }, false);
