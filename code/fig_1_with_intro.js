@@ -88,6 +88,11 @@ network.on("afterDrawing", function (ctx) {
 function expandNode(node) {
     if (node.expanded)
         return false;
+    addMissingEdges(node);
+    nodes.update({ id: node.id, expanded: true });
+    return false;
+    if (node.expanded)
+        return false;
     // console.log("cur node: ", cur_node);
     let next_states = State.nextStates(node.state, modulo_player, see_clearly);
     for (const [input, new_state] of Object.entries(next_states)) {
@@ -171,11 +176,12 @@ function addNode(state, x = undefined, y = undefined) {
         id: id,
         state: state,
         won: won,
-        expanded: false,
+        expanded: true,
         // label: id,
         // label: CONFIG.showIDs ? id : "",
         // label: "",
-        color: "#9803fc",
+        color: "#fcba03",
+        // color: "#9803fc",
         shape: (state === State.initialState) ? "diamond" : won ? "star" : "dot",
         // shape: "image",
         x: x,
@@ -185,6 +191,7 @@ function addNode(state, x = undefined, y = undefined) {
         // ctxRenderer: ctxRenderer,
     };
     nodes.add(cur_node);
+    addMissingEdges(cur_node);
 }
 function addNodeWithAnimation(state, pos_x, pos_y, view_x, view_y) {
     let id = State.id(state);
@@ -194,7 +201,8 @@ function addNodeWithAnimation(state, pos_x, pos_y, view_x, view_y) {
         state: State.copy(state),
         won: won,
         expanded: false,
-        color: "#9803fc",
+        color: "#fcba03",
+        // color: "#9803fc",
         shape: (state === State.initialState) ? "diamond" : won ? "star" : "dot",
         x: pos_x,
         y: pos_y,
@@ -291,6 +299,10 @@ function findNodeContainingState(state) {
 }
 function setMainNode(state) {
     let cur_node = nodes.get(State.id(state));
+    if (cur_node === null) {
+        addNode(state);
+        cur_node = nodes.get(State.id(state));
+    }
     expandNode(cur_node);
     cur_node.expanded = true;
     cur_state = state;
@@ -333,6 +345,7 @@ function draw(cur_time) {
         if (animation_state.t >= 1) {
             nodes.add(animation_state.node);
             addMissingEdges(animation_state.node);
+            network.setSelection({ nodes: [animation_state.node.id] });
             animation_state = null;
         }
     }

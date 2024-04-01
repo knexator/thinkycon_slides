@@ -115,6 +115,11 @@ network.on("afterDrawing", function (ctx: CanvasRenderingContext2D) {
 
 function expandNode(node: Node): boolean {
     if (node.expanded) return false;
+    addMissingEdges(node);
+    nodes.update({ id: node.id, expanded: true });
+    return false;
+
+    if (node.expanded) return false;
     // console.log("cur node: ", cur_node);
     let next_states = State.nextStates(node.state, modulo_player, see_clearly);
     for (const [input, new_state] of Object.entries(next_states)) {
@@ -199,12 +204,13 @@ function addNode(state: SokobanState, x: number | undefined = undefined, y: numb
         id: id,
         state: state,
         won: won,
-        expanded: false,
+        expanded: true,
 
         // label: id,
         // label: CONFIG.showIDs ? id : "",
         // label: "",
-        color: "#9803fc",
+        color: "#fcba03",
+        // color: "#9803fc",
         shape: (state === State.initialState) ? "diamond" : won ? "star" : "dot",
         // shape: "image",
         x: x,
@@ -215,6 +221,7 @@ function addNode(state: SokobanState, x: number | undefined = undefined, y: numb
         // ctxRenderer: ctxRenderer,
     } as Node;
     nodes.add(cur_node);
+    addMissingEdges(cur_node);
 }
 
 function addNodeWithAnimation(state: SokobanState, pos_x: number, pos_y: number, view_x: number, view_y: number) {
@@ -226,7 +233,8 @@ function addNodeWithAnimation(state: SokobanState, pos_x: number, pos_y: number,
         won: won,
         expanded: false,
 
-        color: "#9803fc",
+        color: "#fcba03",
+        // color: "#9803fc",
         shape: (state === State.initialState) ? "diamond" : won ? "star" : "dot",
         x: pos_x,
         y: pos_y,
@@ -324,6 +332,10 @@ function findNodeContainingState(state: SokobanState): Node | null {
 
 function setMainNode(state: SokobanState) {
     let cur_node = nodes.get(State.id(state));
+    if (cur_node === null) {
+        addNode(state);
+        cur_node = nodes.get(State.id(state));
+    }
     expandNode(cur_node);
     cur_node.expanded = true;
     cur_state = state;
@@ -377,6 +389,7 @@ function draw(cur_time: number | undefined) {
         if (animation_state.t >= 1) {
             nodes.add(animation_state.node);
             addMissingEdges(animation_state.node);
+            network.setSelection({ nodes: [animation_state.node.id] });
             animation_state = null;
         }
     }
