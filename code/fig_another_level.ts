@@ -300,6 +300,7 @@ window.addEventListener("keydown", (ev: KeyboardEvent) => {
 });
 
 function findNodeContainingState(state: SokobanState): Node | null {
+    // TODO: take player into account
     let res = nodes.get({
         filter: function (node: Node) {
             for (let k=0; k<state.crates.length; k++) {

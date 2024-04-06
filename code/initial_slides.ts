@@ -93,6 +93,11 @@ document.addEventListener('keydown', ev => {
                 imgs[cur].style.display = "unset";
                 canvas.style.display = (cur === 1 || cur === 2) ? "initial" : "none";
             }
+        } else if (ev.code === "KeyQ") {
+            imgs[cur].style.display = "none";
+            cur -= 1;
+            imgs[cur].style.display = "unset";
+            canvas.style.display = (cur === 1 || cur === 2) ? "initial" : "none";
         }
         if (window.parent !== window) {
             // @ts-expect-error

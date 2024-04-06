@@ -265,6 +265,7 @@ window.addEventListener("keydown", (ev) => {
     }
 });
 function findNodeContainingState(state) {
+    // TODO: take player into account
     let res = nodes.get({
         filter: function (node) {
             for (let k = 0; k < state.crates.length; k++) {
