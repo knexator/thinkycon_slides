@@ -333,10 +333,10 @@ function drawState(state, ctx, pos, main = false) {
     state.targets.forEach(target => {
         drawSprite(2, target.x, target.y);
     });
+    drawSprite(4, state.player.x, state.player.y);
     state.crates.forEach(crate => {
         drawSprite(3, crate.x, crate.y);
     });
-    drawSprite(4, state.player.x, state.player.y);
 }
 function drawStateToCanvas(state) {
     let TILE_S = 50;

@@ -15,7 +15,7 @@ state_rightBlocksLeft.player.y += 1;
 let state_magic = structuredClone(State.initialState);
 state_magic.crates[1].y -= 1;
 state_magic.crates[0].y -= 1;
-state_magic.player.x += 3;
+state_magic.player.x += 1;
 state_magic.player.y += 2;
 
 

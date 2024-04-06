@@ -169,7 +169,7 @@ network.on("afterDrawing", function (ctx: CanvasRenderingContext2D) {
         // TODO: tangents, etc
         let node_positions: Record<string, Vec> = network.getPositions();
         ctx.lineWidth = 4;
-        ctx.strokeStyle = "red";
+        ctx.strokeStyle = "#FF00FF";
         ctx.beginPath();
         moveTo(ctx, addVec(node_positions["1:1[0:2,2:3]"], { x: -20, y: 20 }));
         lineTo(ctx, addVec(node_positions["1:1[0:2,1:3]"], { x: -20, y: 20 }));
@@ -199,7 +199,7 @@ network.on("afterDrawing", function (ctx: CanvasRenderingContext2D) {
             return;
         }
 
-        ctx.strokeStyle = "green";
+        ctx.strokeStyle = "#00FF00";
         ctx.beginPath();
         moveTo(ctx, addVec(node_positions["1:1[0:2,2:3]"], { x: 20, y: 20 }));
         lineTo(ctx, addVec(node_positions["1:1[0:1,2:3]"], { x: 20, y: 20 }));
@@ -231,7 +231,7 @@ network.on("afterDrawing", function (ctx: CanvasRenderingContext2D) {
             return;
         }
 
-        ctx.strokeStyle = "blue";
+        ctx.strokeStyle = "#00FFFF";
         ctx.beginPath();
         moveTo(ctx, addVec(node_positions["1:1[0:2,2:3]"], { x: -20, y: -20 }));
         lineTo(ctx, addVec(node_positions["1:1[0:1,2:3]"], { x: -20, y: -20 }));
@@ -465,8 +465,10 @@ window.addEventListener("keydown", (ev: KeyboardEvent) => {
         ev.preventDefault();
         return false;
     } else if (ev.code === "KeyF") {
-        if (cur_showing < 6) {
+        if (cur_showing < 5) {
             cur_showing += 1;
+        } else {
+            document.querySelector<HTMLImageElement>("#note")!.style.display = "unset";
         }
         ev.preventDefault();
         return false;

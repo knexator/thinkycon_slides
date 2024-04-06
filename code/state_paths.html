@@ -3,11 +3,24 @@
 
 <head>
     <link rel="stylesheet" href="common.css">
+    <style>
+        #note {
+            top: -5vw;
+            /* bottom: 0vh; */
+            right: -3vw;
+            position: absolute;
+            pointer-events: none;
+            scale: .65;
+            overflow: hidden;
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
     <div id="mynetwork"></div>
     <script src="state_paths.js" type="module"></script>
+    <div id="note"><img src="../state_space_colored.svg"></div>
 </body>
 
 </html>

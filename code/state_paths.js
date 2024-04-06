@@ -137,7 +137,7 @@ network.on("afterDrawing", function (ctx) {
         // TODO: tangents, etc
         let node_positions = network.getPositions();
         ctx.lineWidth = 4;
-        ctx.strokeStyle = "red";
+        ctx.strokeStyle = "#FF00FF";
         ctx.beginPath();
         moveTo(ctx, addVec(node_positions["1:1[0:2,2:3]"], { x: -20, y: 20 }));
         lineTo(ctx, addVec(node_positions["1:1[0:2,1:3]"], { x: -20, y: 20 }));
@@ -166,7 +166,7 @@ network.on("afterDrawing", function (ctx) {
             end();
             return;
         }
-        ctx.strokeStyle = "green";
+        ctx.strokeStyle = "#00FF00";
         ctx.beginPath();
         moveTo(ctx, addVec(node_positions["1:1[0:2,2:3]"], { x: 20, y: 20 }));
         lineTo(ctx, addVec(node_positions["1:1[0:1,2:3]"], { x: 20, y: 20 }));
@@ -197,7 +197,7 @@ network.on("afterDrawing", function (ctx) {
             end();
             return;
         }
-        ctx.strokeStyle = "blue";
+        ctx.strokeStyle = "#00FFFF";
         ctx.beginPath();
         moveTo(ctx, addVec(node_positions["1:1[0:2,2:3]"], { x: -20, y: -20 }));
         lineTo(ctx, addVec(node_positions["1:1[0:1,2:3]"], { x: -20, y: -20 }));
@@ -412,8 +412,11 @@ window.addEventListener("keydown", (ev) => {
         return false;
     }
     else if (ev.code === "KeyF") {
-        if (cur_showing < 6) {
+        if (cur_showing < 5) {
             cur_showing += 1;
+        }
+        else {
+            document.querySelector("#note").style.display = "unset";
         }
         ev.preventDefault();
         return false;
