@@ -350,30 +350,39 @@ function drawState(state: SokobanState, ctx: CanvasRenderingContext2D, pos: Vec,
     let TILE_S = main ? Math.ceil(ctx.canvas.height / state.h) : 50;
     ctx.imageSmoothingEnabled = false;
 
-    let OFF_X = main ? 0 : Math.ceil(pos.x - state.w * TILE_S / 2);
-    let OFF_Y = main ? 0 : Math.ceil(pos.y + TILE_S);
+    let OFF_X = main ? 0 : Math.round(pos.x - state.w * TILE_S / 2);
+    let OFF_Y = main ? 0 : Math.round(pos.y + TILE_S);
+
+    function drawSprite(id: number, i: number, j: number) {
+        ctx.drawImage(spritesheet, 1 + id * 7, 1, 5, 5,
+            Math.floor(OFF_X + i * TILE_S) - 1,
+            Math.floor(OFF_Y + j * TILE_S) - 1,
+            Math.ceil(TILE_S) + 1,
+            Math.ceil(TILE_S) + 1,
+        );
+    }
 
     for (let j = 0; j < state.h; j++) {
         for (let i = 0; i < state.w; i++) {
             if (state.walls[j][i]) {
                 // wall
-                ctx.drawImage(spritesheet, 1 + 0 * 7, 1, 5, 5, OFF_X + i * TILE_S, OFF_Y + j * TILE_S, TILE_S, TILE_S);
+                drawSprite(0, i, j);
             } else {
                 // background
-                ctx.drawImage(spritesheet, 1 + 1 * 7, 1, 5, 5, OFF_X + i * TILE_S, OFF_Y + j * TILE_S, TILE_S + 1, TILE_S + 1);
+                drawSprite(1, i, j);
             }
         }
     }
 
     state.targets.forEach(target => {
-        ctx.drawImage(spritesheet, 1 + 2 * 7, 1, 5, 5, OFF_X + target.x * TILE_S, OFF_Y + target.y * TILE_S, TILE_S, TILE_S);
+        drawSprite(2, target.x, target.y);
     })
 
-    state.crates.forEach(target => {
-        ctx.drawImage(spritesheet, 1 + 3 * 7, 1, 5, 5, OFF_X + target.x * TILE_S, OFF_Y + target.y * TILE_S, TILE_S, TILE_S);
+    state.crates.forEach(crate => {
+        drawSprite(3, crate.x, crate.y);
     })
 
-    ctx.drawImage(spritesheet, 1 + 4 * 7, 1, 5, 5, OFF_X + state.player.x * TILE_S, OFF_Y + state.player.y * TILE_S, TILE_S, TILE_S);
+    drawSprite(4, state.player.x, state.player.y);
 }
 
 function drawStateToCanvas(state: SokobanState) {
@@ -383,7 +392,7 @@ function drawStateToCanvas(state: SokobanState) {
     temp_canvas.height = state.h * TILE_S;
     let temp_ctx = temp_canvas.getContext('2d')!;
     temp_ctx.imageSmoothingEnabled = false;
-    drawState(state, temp_ctx, {x: 0, y: 0}, true);
+    drawState(state, temp_ctx, { x: 0, y: 0 }, true);
     return temp_canvas;
 }
 
@@ -541,7 +550,7 @@ export function scaleVec(a: Vec, s: number): Vec {
 export function rotVec(a: Vec, radians: number): Vec {
     let c = Math.cos(radians);
     let s = Math.sin(radians);
-    return { x: a.x * c - a.y * s, y: a.x * s + a.y * c};
+    return { x: a.x * c - a.y * s, y: a.x * s + a.y * c };
 }
 
 export function subVec(a: Vec, b: Vec): Vec {
